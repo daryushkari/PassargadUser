@@ -1,32 +1,34 @@
 package app
 
 import (
-	userPb "PassargadUser/api/pb/proto"
 	"PassargadUser/config"
-	userDelivery "PassargadUser/delivery/grpc/user"
-	"google.golang.org/grpc"
+	"PassargadUser/domain"
 	"log"
-	"net"
 )
 
 func InitApp() {
-	cnf, err := config.Get("./config.json")
+	_, err := config.Get("./config.json")
 	if err != nil {
 		log.Fatalf("config not available with error: %v", err.Error())
 	}
 
-	lis, err := net.Listen("tcp", cnf.ExternalExpose.GrpcPort)
+	err = db.AutoMigrate(&domain.User{})
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		log.Fatalf("migration failed: %v", err.Error())
 	}
 
-	s := userDelivery.Server{}
-
-	grpcServer := grpc.NewServer()
-
-	userPb.RegisterUserServer(grpcServer, &s)
-
-	if err = grpcServer.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %s", err)
-	}
+	//lis, err := net.Listen("tcp", cnf.ExternalExpose.GrpcPort)
+	//if err != nil {
+	//	log.Fatalf("failed to listen: %v", err)
+	//}
+	//
+	//s := userDelivery.Server{}
+	//
+	//grpcServer := grpc.NewServer()
+	//
+	//userPb.RegisterUserServer(grpcServer, &s)
+	//
+	//if err = grpcServer.Serve(lis); err != nil {
+	//	log.Fatalf("failed to serve: %s", err)
+	//}
 }

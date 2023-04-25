@@ -6,13 +6,13 @@ import (
 )
 
 var (
-	config *Config = nil
+	config *Config
 )
 
 type Config struct {
 	Database struct {
 		Name string `json:"name"`
-	} `json:"database"`
+	} `json:"sqlite"`
 	ExternalExpose struct {
 		GrpcPort string `json:"grpc-port"`
 		RestPort string `json:"rest-port"`
@@ -21,6 +21,7 @@ type Config struct {
 
 func Get(cnfPath string) (*Config, error) {
 	if config == nil {
+		config = &Config{}
 		file, err := os.ReadFile(cnfPath)
 		if err != nil {
 			return nil, err
