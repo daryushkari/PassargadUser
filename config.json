@@ -1,0 +1,9 @@
+{
+  "database": {
+    "name": "database.db"
+  },
+  "externalExpose": {
+    "grpc-port": "9000",
+    "rest-port": "9091"
+  }
+}
