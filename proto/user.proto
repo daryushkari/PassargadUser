@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package userPB;
+
+option go_package = "./userPB;userPB";
+
+service user {
+  rpc Create(CreateRequest) returns (CreateResponse) {}
+  //  rpc Delete(DeleteRequest) returns (CreateResponse) {}
+  //  rpc Get(CreateRequest) returns (CreateResponse) {}
+  //  rpc Update(CreateRequest) returns (CreateResponse) {}
+  //  rpc Login(CreateRequest) returns (CreateResponse) {}
+}
+
+message CreateRequest{
+  string firstname = 1;
+  string lastname = 2;
+  string username = 3;
+  string password = 4;
+  string email = 6;
+}
+
+message CreateResponse{
+  string message = 1;
+  uint32 code = 2;
+}
