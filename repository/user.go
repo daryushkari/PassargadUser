@@ -2,7 +2,6 @@ package repository
 
 import (
 	"PassargadUser/domain"
-	"PassargadUser/pkg/crypt"
 	"context"
 	"gorm.io/gorm"
 	"time"
@@ -55,6 +54,7 @@ func (r *UserRepository) Delete(ctx context.Context, userId uint) (err error) {
 
 func (r *UserRepository) GetByUsername(ctx context.Context, userName string) (err error, usr *domain.User) {
 	tx := r.DB.WithContext(ctx)
+	usr = &domain.User{}
 	rdb := tx.First(usr, "username = ?", userName)
 	if rdb.Error != nil {
 		return rdb.Error, nil
@@ -63,6 +63,7 @@ func (r *UserRepository) GetByUsername(ctx context.Context, userName string) (er
 }
 
 func (r *UserRepository) GetById(ctx context.Context, userId uint) (err error, usr *domain.User) {
+	usr = &domain.User{}
 	tx := r.DB.WithContext(ctx)
 	rdb := tx.First(usr, userId)
 	if rdb.Error != nil {
@@ -72,9 +73,10 @@ func (r *UserRepository) GetById(ctx context.Context, userId uint) (err error, u
 }
 
 func (r *UserRepository) Update(ctx context.Context, usr *domain.User) (err error) {
+	usr = &domain.User{}
 	tx := r.DB.WithContext(ctx)
 	rdb := tx.Model(usr).Updates(domain.User{
-		Password:  crypt.GetMD5Hash(usr.Password),
+		Password:  usr.Password,
 		Email:     usr.Email,
 		Firstname: usr.Email,
 		Lastname:  usr.Lastname,

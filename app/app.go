@@ -5,6 +5,7 @@ import (
 	"PassargadUser/domain"
 	"PassargadUser/pkg/sqlite"
 	"PassargadUser/repository"
+	"context"
 	"log"
 )
 
@@ -25,6 +26,9 @@ func InitApp() {
 
 	repository.UsrRepo.InitDB(sDB)
 
+	//a := domain.User{Username: "3"}
+	err, idd := repository.UsrRepo.GetByUsername(context.Background(), "3")
+	log.Println("bbbbbb", idd, err)
 	//lis, err := net.Listen("tcp", cnf.ExternalExpose.GrpcPort)
 	//if err != nil {
 	//	log.Fatalf("failed to listen: %v", err)
