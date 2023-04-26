@@ -4,6 +4,7 @@ import (
 	"PassargadUser/config"
 	"PassargadUser/domain"
 	"PassargadUser/pkg/sqlite"
+	"PassargadUser/repository"
 	"log"
 )
 
@@ -21,6 +22,8 @@ func InitApp() {
 	if err != nil {
 		log.Fatalf("migration failed: %v", err.Error())
 	}
+
+	repository.UsrRepo.InitDB(sDB)
 
 	//lis, err := net.Listen("tcp", cnf.ExternalExpose.GrpcPort)
 	//if err != nil {

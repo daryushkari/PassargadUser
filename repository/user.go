@@ -9,14 +9,15 @@ import (
 )
 
 var (
-	User UserRepositoryInterface = user{}
+	UsrRepo UserRepositoryInterface = &UserRepository{}
 )
 
-type user struct {
+type UserRepository struct {
 	DB *gorm.DB
 }
 
 type UserRepositoryInterface interface {
+	InitDB(db *gorm.DB)
 	Create(ctx context.Context, usr *domain.User) (err error, userId uint)
 	Delete(ctx context.Context, userId uint) (err error)
 	GetByUsername(ctx context.Context, userName string) (err error, usr *domain.User)
@@ -24,7 +25,11 @@ type UserRepositoryInterface interface {
 	Update(ctx context.Context, usr *domain.User) (err error)
 }
 
-func (r user) Create(ctx context.Context, usr *domain.User) (err error, userId uint) {
+func (r *UserRepository) InitDB(db *gorm.DB) {
+	r.DB = db
+}
+
+func (r *UserRepository) Create(ctx context.Context, usr *domain.User) (err error, userId uint) {
 	tx := r.DB.WithContext(ctx)
 	rdb := tx.Create(usr)
 	if rdb.Error != nil {
@@ -33,7 +38,7 @@ func (r user) Create(ctx context.Context, usr *domain.User) (err error, userId u
 	return nil, usr.ID
 }
 
-func (r user) Delete(ctx context.Context, userId uint) (err error) {
+func (r *UserRepository) Delete(ctx context.Context, userId uint) (err error) {
 	usr := &domain.User{}
 	tx := r.DB.WithContext(ctx)
 	rdb := tx.First(usr, userId)
@@ -48,7 +53,7 @@ func (r user) Delete(ctx context.Context, userId uint) (err error) {
 	return nil
 }
 
-func (r user) GetByUsername(ctx context.Context, userName string) (err error, usr *domain.User) {
+func (r *UserRepository) GetByUsername(ctx context.Context, userName string) (err error, usr *domain.User) {
 	tx := r.DB.WithContext(ctx)
 	rdb := tx.First(usr, "username = ?", userName)
 	if rdb.Error != nil {
@@ -57,7 +62,7 @@ func (r user) GetByUsername(ctx context.Context, userName string) (err error, us
 	return nil, usr
 }
 
-func (r user) GetById(ctx context.Context, userId uint) (err error, usr *domain.User) {
+func (r *UserRepository) GetById(ctx context.Context, userId uint) (err error, usr *domain.User) {
 	tx := r.DB.WithContext(ctx)
 	rdb := tx.First(usr, userId)
 	if rdb.Error != nil {
@@ -66,7 +71,7 @@ func (r user) GetById(ctx context.Context, userId uint) (err error, usr *domain.
 	return nil, usr
 }
 
-func (r user) Update(ctx context.Context, usr *domain.User) (err error) {
+func (r *UserRepository) Update(ctx context.Context, usr *domain.User) (err error) {
 	tx := r.DB.WithContext(ctx)
 	rdb := tx.Model(usr).Updates(domain.User{
 		Password:  crypt.GetMD5Hash(usr.Password),
