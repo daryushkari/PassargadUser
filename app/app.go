@@ -8,7 +8,7 @@ import (
 )
 
 func InitApp() {
-	cfg, err := config.Get("./config.json")
+	cfg, err := config.Get("./config.json", config.ProductionEnv)
 	if err != nil {
 		log.Fatalf("config not available with error: %v", err.Error())
 	}

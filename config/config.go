@@ -6,10 +6,10 @@ import (
 )
 
 var (
-	config *Config
+	config *EnvConfig
 )
 
-type Config struct {
+type EnvConfig struct {
 	Database struct {
 		Name string `json:"name"`
 	} `json:"database"`
@@ -19,17 +19,29 @@ type Config struct {
 	} `json:"externalExpose"`
 }
 
-func Get(cnfPath string) (*Config, error) {
+type FullConfig struct {
+	Prod EnvConfig `json:"production"`
+	Test EnvConfig `json:"test"`
+}
+
+const (
+	ProductionEnv = "production"
+	TestEnv       = "test"
+)
+
+func Get(cnfPath string, env string) (*EnvConfig, error) {
 	if config == nil {
-		config = &Config{}
+		config = &EnvConfig{}
+		fullCfg := map[string]*EnvConfig{}
 		file, err := os.ReadFile(cnfPath)
 		if err != nil {
 			return nil, err
 		}
-		err = json.Unmarshal(file, config)
+		err = json.Unmarshal(file, &fullCfg)
 		if err != nil {
 			return nil, err
 		}
+		config = fullCfg[env]
 	}
 	return config, nil
 }

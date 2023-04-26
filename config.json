@@ -1,9 +1,21 @@
 {
-  "database": {
-    "name": "./database.db"
+  "production": {
+    "database": {
+      "name": "./database.db"
+    },
+    "externalExpose": {
+      "grpc-port": "9000",
+      "rest-port": "9091"
+    }
   },
-  "externalExpose": {
-    "grpc-port": "9000",
-    "rest-port": "9091"
+
+  "test": {
+    "database": {
+      "name": "./test.db"
+    },
+    "externalExpose": {
+      "grpc-port": "10100",
+      "rest-port": "10101"
+    }
   }
 }
