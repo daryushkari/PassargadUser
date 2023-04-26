@@ -3,16 +3,21 @@ package app
 import (
 	"PassargadUser/config"
 	"PassargadUser/domain"
+	"PassargadUser/pkg/sqlite"
 	"log"
 )
 
 func InitApp() {
-	_, err := config.Get("./config.json")
+	cfg, err := config.Get("./config.json")
 	if err != nil {
 		log.Fatalf("config not available with error: %v", err.Error())
 	}
+	err, sDB := sqlite.Get(cfg.Database.Name)
+	if err != nil {
+		log.Fatalf("could not connect to database: %v", err.Error())
+	}
 
-	err = db.AutoMigrate(&domain.User{})
+	err = sDB.AutoMigrate(&domain.User{})
 	if err != nil {
 		log.Fatalf("migration failed: %v", err.Error())
 	}

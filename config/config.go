@@ -12,7 +12,7 @@ var (
 type Config struct {
 	Database struct {
 		Name string `json:"name"`
-	} `json:"sqlite"`
+	} `json:"database"`
 	ExternalExpose struct {
 		GrpcPort string `json:"grpc-port"`
 		RestPort string `json:"rest-port"`

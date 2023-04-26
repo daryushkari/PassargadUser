@@ -1,6 +1,6 @@
 {
   "database": {
-    "name": "database.db"
+    "name": "./database.db"
   },
   "externalExpose": {
     "grpc-port": "9000",
