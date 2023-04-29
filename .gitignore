@@ -18,3 +18,4 @@
 /.idea/modules.xml
 /.idea/vcs.xml
 /.idea/walletMicroservice.iml
+secret-config.json

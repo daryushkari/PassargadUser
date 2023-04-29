@@ -4,8 +4,7 @@ import (
 	"PassargadUser/config"
 	"PassargadUser/domain"
 	"PassargadUser/pkg/sqlite"
-	"PassargadUser/repository"
-	"context"
+	"github.com/gin-gonic/gin"
 	"log"
 )
 
@@ -24,11 +23,15 @@ func InitApp() {
 		log.Fatalf("migration failed: %v", err.Error())
 	}
 
-	repository.UsrRepo.InitDB(sDB)
+	r := gin.Default()
+	r.GET("/tab", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "nine",
+		})
+	})
+	r.Run()
+	// listen and serve on 0.0.0.0:8080
 
-	//a := domain.User{Username: "3"}
-	err, idd := repository.UsrRepo.GetByUsername(context.Background(), "3")
-	log.Println("bbbbbb", idd, err)
 	//lis, err := net.Listen("tcp", cnf.ExternalExpose.GrpcPort)
 	//if err != nil {
 	//	log.Fatalf("failed to listen: %v", err)
