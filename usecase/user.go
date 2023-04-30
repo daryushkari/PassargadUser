@@ -8,6 +8,7 @@ import (
 	"PassargadUser/repository"
 	"errors"
 	"github.com/gin-gonic/gin"
+	_ "github.com/golang-jwt/jwt"
 	"gorm.io/gorm"
 	"net/http"
 )
@@ -43,5 +44,42 @@ func CreateUser(ctx *gin.Context, input requestModel.CreateRequest) (err error, 
 	return nil, &requestModel.BasicResponse{
 		Message: messages.CreatedSuccessfully,
 		Code:    http.StatusCreated,
+	}
+}
+
+func LoginUser(ctx *gin.Context, input requestModel.LoginRequest) (err error, output *requestModel.LoginResponse) {
+	err, usr := repository.UsrRepo.GetByUsername(ctx, input.Username)
+
+	if err == gorm.ErrRecordNotFound {
+		return err, &requestModel.LoginResponse{
+			Message: messages.UserNameNotExist,
+			Code:    http.StatusBadRequest,
+		}
+	}
+	if err != nil {
+		return err, &requestModel.LoginResponse{
+			Message: err.Error(),
+			Code:    http.StatusInternalServerError,
+		}
+	}
+
+	if crypt.GetMD5Hash(input.Password) == usr.Password {
+		err, token := crypt.GenerateJWT(usr.Username)
+		if err != nil {
+			return err, &requestModel.LoginResponse{
+				Message: err.Error(),
+				Code:    http.StatusInternalServerError,
+			}
+		}
+		return nil, &requestModel.LoginResponse{
+			JWTToken: token,
+			Message:  messages.LoginSuccessful,
+			Code:     http.StatusOK,
+		}
+	}
+
+	return err, &requestModel.LoginResponse{
+		Message: messages.WrongPassword,
+		Code:    http.StatusBadRequest,
 	}
 }

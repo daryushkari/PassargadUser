@@ -1,12 +1,19 @@
 package requestModel
 
-type ErrorResponse struct {
-	Message string `json:"message"`
-}
-
 type LoginRequest struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
+}
+
+type LoginResponse struct {
+	JWTToken string `json:"jwt-token"`
+	Message  string `json:"message"`
+	Code     int    `json:"code"`
+}
+
+type ErrorResponse struct {
+	Code    string `json:"code"`
+	Message string `json:"message"`
 }
 
 type CreateRequest struct {

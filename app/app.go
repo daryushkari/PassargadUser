@@ -2,9 +2,11 @@ package app
 
 import (
 	"PassargadUser/config"
+	"PassargadUser/delivery/rest"
 	"PassargadUser/entities/domain"
 	"PassargadUser/pkg/sqlite"
 	"PassargadUser/repository"
+	"github.com/gin-gonic/gin"
 	"log"
 )
 
@@ -25,13 +27,9 @@ func InitApp() {
 		log.Fatalf("migration failed: %v", err.Error())
 	}
 
-	//r := gin.Default()
-	//r.GET("/tab", func(c *gin.Context) {
-	//	c.JSON(200, gin.H{
-	//		"message": "nine",
-	//	})
-	//})
-	//r.Run()
+	r := gin.Default()
+	r.POST("/create", rest.CreateUser)
+	r.Run()
 	////
 	//c, _ := gin.CreateTestContext(httptest.NewRecorder())
 	//err, usr := repository.UsrRepo.GetByUsername(c, "hellodsfdf")
