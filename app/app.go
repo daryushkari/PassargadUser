@@ -28,16 +28,12 @@ func InitApp() {
 	}
 
 	r := gin.Default()
+	//r.Use(gin.Recovery())
+	//r.Use(gin.Logger())
 	r.POST("/create", rest.CreateUser)
 	r.POST("/login", rest.LoginUser)
 	r.Run()
-	////
-	//c, _ := gin.CreateTestContext(httptest.NewRecorder())
-	//err, usr := repository.UsrRepo.GetByUsername(c, "hellodsfdf")
-	//if err == gorm.ErrRecordNotFound {
-	//	log.Println("jjjjjjjjjjjjjj")
-	//}
-	//log.Println(err, "ggggg", usr)
+
 	//lis, err := net.Listen("tcp", cnf.ExternalExpose.GrpcPort)
 	//if err != nil {
 	//	log.Fatalf("failed to listen: %v", err)

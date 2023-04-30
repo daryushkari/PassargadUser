@@ -21,6 +21,7 @@ func CreateUser(ctx *gin.Context) {
 	err, out := usecase.CreateUser(ctx, input)
 	if err != nil {
 		ctx.JSON(out.Code, gin.H{"error": out})
+		return
 	}
 	ctx.JSON(out.Code, gin.H{"data": out})
 }
