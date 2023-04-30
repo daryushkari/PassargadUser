@@ -29,6 +29,7 @@ func InitApp() {
 
 	r := gin.Default()
 	r.POST("/create", rest.CreateUser)
+	r.POST("/login", rest.LoginUser)
 	r.Run()
 	////
 	//c, _ := gin.CreateTestContext(httptest.NewRecorder())
