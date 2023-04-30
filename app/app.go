@@ -2,9 +2,9 @@ package app
 
 import (
 	"PassargadUser/config"
-	"PassargadUser/domain"
+	"PassargadUser/entities/domain"
 	"PassargadUser/pkg/sqlite"
-	"github.com/gin-gonic/gin"
+	"PassargadUser/repository"
 	"log"
 )
 
@@ -18,20 +18,27 @@ func InitApp() {
 		log.Fatalf("could not connect to database: %v", err.Error())
 	}
 
+	repository.UsrRepo.InitDB(sDB)
+
 	err = sDB.AutoMigrate(&domain.User{})
 	if err != nil {
 		log.Fatalf("migration failed: %v", err.Error())
 	}
 
-	r := gin.Default()
-	r.GET("/tab", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "nine",
-		})
-	})
-	r.Run()
-	// listen and serve on 0.0.0.0:8080
-
+	//r := gin.Default()
+	//r.GET("/tab", func(c *gin.Context) {
+	//	c.JSON(200, gin.H{
+	//		"message": "nine",
+	//	})
+	//})
+	//r.Run()
+	////
+	//c, _ := gin.CreateTestContext(httptest.NewRecorder())
+	//err, usr := repository.UsrRepo.GetByUsername(c, "hellodsfdf")
+	//if err == gorm.ErrRecordNotFound {
+	//	log.Println("jjjjjjjjjjjjjj")
+	//}
+	//log.Println(err, "ggggg", usr)
 	//lis, err := net.Listen("tcp", cnf.ExternalExpose.GrpcPort)
 	//if err != nil {
 	//	log.Fatalf("failed to listen: %v", err)
