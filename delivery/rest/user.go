@@ -2,31 +2,37 @@ package rest
 
 import (
 	"PassargadUser/entities/requestModel"
+	"PassargadUser/usecase"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-func DeleteUser(c *gin.Context) {
+func DeleteUser(ctx *gin.Context) {
 
 }
 
-func CreateUser(c *gin.Context) {
+func CreateUser(ctx *gin.Context) {
 	var input requestModel.CreateRequest
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
+	err, out := usecase.CreateUser(ctx, input)
+	if err != nil {
+		ctx.JSON(out.Code, gin.H{"error": out})
+	}
+	ctx.JSON(out.Code, gin.H{"data": out})
 }
 
-func UpdateUser(c *gin.Context) {
+func UpdateUser(ctx *gin.Context) {
 
 }
 
-func GetUserInfo(c *gin.Context) {
+func GetUserInfo(ctx *gin.Context) {
 
 }
 
-func LoginUser(c *gin.Context) {
+func LoginUser(ctx *gin.Context) {
 
 }

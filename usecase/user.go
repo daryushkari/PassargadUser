@@ -21,7 +21,10 @@ func CreateUser(ctx *gin.Context, input requestModel.CreateRequest) (err error, 
 		}
 	}
 	if err != gorm.ErrRecordNotFound {
-		return err, nil
+		return err, &requestModel.BasicResponse{
+			Message: err.Error(),
+			Code:    http.StatusInternalServerError,
+		}
 	}
 	usrCreate := &domain.User{
 		Username:  input.Username,
@@ -32,7 +35,10 @@ func CreateUser(ctx *gin.Context, input requestModel.CreateRequest) (err error, 
 	}
 	err = repository.UsrRepo.Create(ctx, usrCreate)
 	if err != nil {
-		return err, nil
+		return err, &requestModel.BasicResponse{
+			Message: err.Error(),
+			Code:    http.StatusInternalServerError,
+		}
 	}
 	return nil, &requestModel.BasicResponse{
 		Message: messages.CreatedSuccessfully,
