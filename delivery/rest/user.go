@@ -44,6 +44,7 @@ func LoginUser(ctx *gin.Context) {
 	err, out := usecase.LoginUser(ctx, input)
 	if err != nil {
 		ctx.JSON(out.Code, gin.H{"error": out})
+		return
 	}
 	ctx.JSON(out.Code, gin.H{"data": out})
 }
