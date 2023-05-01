@@ -6,6 +6,8 @@ const (
 	WrongPassword       = "password is wrong"
 	LoginSuccessful     = "user is logged in"
 	CreatedSuccessfully = "user created successfully"
+	APISuccess          = "success"
 	UnAuthorized        = "user is unauthorized"
-	InternalServerError = "Internal server error"
+	InternalServerError = "internal server error"
+	BadRequest          = "bad request"
 )

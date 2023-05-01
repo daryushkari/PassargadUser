@@ -73,7 +73,6 @@ func (r *UserRepository) GetById(ctx *gin.Context, userId uint) (err error, usr 
 }
 
 func (r *UserRepository) Update(ctx *gin.Context, usr *domain.User) (err error) {
-	usr = &domain.User{}
 	tx := r.DB.WithContext(ctx)
 	rdb := tx.Model(usr).Updates(domain.User{
 		Password:  usr.Password,
