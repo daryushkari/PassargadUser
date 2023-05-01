@@ -72,38 +72,3 @@ func VerifyToken(tokenString string, secretKey []byte) (err error, jwtData *JWTD
 		Username:   username,
 	}
 }
-
-//func JWTParser(tkString string) {
-//	tk, err := jwt.Parse(tkString, func(token *jwt.Token) (interface{}, error) {
-//		*jwt.SigningMethodHS256.Alg()
-//		ok := token.Method.(*jwt.SigningMethodECDSA)
-//		if !ok {
-//			log.Println("sidjfisdjfijds")
-//		}
-//		return "", nil
-//	})
-//
-//	if err != nil {
-//		log.Println(err, "bad error")
-//	}
-//
-//	if !tk.Valid || tk.Claims == nil {
-//		log.Println("nok")
-//	}
-//
-//	claims, ok := tk.Claims.(jwt.MapClaims)
-//	if !ok {
-//		log.Println("nok")
-//	}
-//
-//	expireTime, ok := claims["exp"].(time.Time)
-//	if !ok {
-//		log.Println("bad")
-//	}
-//	username, ok := claims["user"].(string)
-//	if !ok {
-//		log.Println("bad")
-//	}
-//	log.Println(username, expireTime)
-//
-//}

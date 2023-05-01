@@ -8,7 +8,6 @@ import (
 	"PassargadUser/usecase"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
-	"log"
 	"net/http"
 )
 
@@ -89,7 +88,6 @@ func UpdateUser(ctx *gin.Context) {
 	usr.Password = crypt.GetMD5Hash(input.Password)
 	usr.Firstname = input.FirstName
 	usr.Lastname = input.LastName
-	log.Println(input.LastName, input.FirstName, "cvcvcvcvvvvvvvvvvvvv")
 	usr.Email = input.Email
 
 	err = repository.UsrRepo.Update(ctx, usr)

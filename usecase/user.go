@@ -6,14 +6,14 @@ import (
 	"PassargadUser/pkg/crypt"
 	"PassargadUser/pkg/messages"
 	"PassargadUser/repository"
+	"context"
 	"errors"
-	"github.com/gin-gonic/gin"
 	_ "github.com/golang-jwt/jwt"
 	"gorm.io/gorm"
 	"net/http"
 )
 
-func CreateUser(ctx *gin.Context, input requestModel.CreateRequest) (err error, output *requestModel.BasicResponse) {
+func CreateUser(ctx context.Context, input requestModel.CreateRequest) (err error, output *requestModel.BasicResponse) {
 	err, _ = repository.UsrRepo.GetByUsername(ctx, input.Username)
 	if err == nil {
 		return errors.New(messages.UserNameExists), &requestModel.BasicResponse{
@@ -47,7 +47,7 @@ func CreateUser(ctx *gin.Context, input requestModel.CreateRequest) (err error, 
 	}
 }
 
-func LoginUser(ctx *gin.Context, input requestModel.LoginRequest) (err error, output *requestModel.LoginResponse) {
+func LoginUser(ctx context.Context, input requestModel.LoginRequest) (err error, output *requestModel.LoginResponse) {
 	err, usr := repository.UsrRepo.GetByUsername(ctx, input.Username)
 
 	if err == gorm.ErrRecordNotFound {
