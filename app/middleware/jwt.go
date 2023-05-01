@@ -12,7 +12,7 @@ import (
 )
 
 type JWTData struct {
-	ExpireTime string
+	ExpireTime int64
 	Username   string
 }
 
@@ -27,18 +27,12 @@ func JWTVerify() gin.HandlerFunc {
 
 		err, jwtData := VerifyToken(ctx.Request.Header["Token"][0], config.SampleSecretKey)
 		if err != nil {
-			ctx.JSON(http.StatusUnauthorized, gin.H{"error": messages.UnAuthorized})
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": messages.UnAuthorized})
 			return
 		}
 
-		expTime, err := time.Parse("2023-05-01T11:23:14", jwtData.ExpireTime)
-		if err != nil {
-			ctx.JSON(http.StatusUnauthorized, gin.H{"error": messages.UnAuthorized})
-			return
-		}
-
-		if time.Now().After(expTime) {
-			ctx.JSON(http.StatusUnauthorized, gin.H{"error": messages.TokenExpired})
+		if time.Now().Unix() == jwtData.ExpireTime {
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": messages.TokenExpired})
 			return
 		}
 
@@ -71,7 +65,7 @@ func VerifyToken(tokenString string, secretKey []byte) (err error, jwtData *JWTD
 		return errors.New("invalid JWT token"), nil
 	}
 
-	expireTime, ok := claims["exp"].(string)
+	expireTime, ok := claims["exp"].(float64)
 	if !ok {
 		return errors.New("invalid JWT token"), nil
 	}
@@ -81,7 +75,7 @@ func VerifyToken(tokenString string, secretKey []byte) (err error, jwtData *JWTD
 	}
 
 	return nil, &JWTData{
-		ExpireTime: expireTime,
+		ExpireTime: int64(expireTime),
 		Username:   username,
 	}
 }
