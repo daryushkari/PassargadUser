@@ -1,24 +1,43 @@
 package middleware
 
 import (
+	"PassargadUser/config"
 	"errors"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"log"
+	"net/http"
 )
+
+type JWTData struct {
+	ExpireTime string
+	Username   string
+}
 
 func JWTVerify() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		log.Println(ctx.Request.Header["Token"])
 		if ctx.Request.Header["Token"] == nil {
 			ctx.Set("user-type", "guest")
+			ctx.Next()
+			return
 		}
 
-		//ctx.Header()
+		err, jwtData := VerifyToken(ctx.Request.Header["Token"][0], config.SampleSecretKey)
+		if err != nil {
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		}
+
+		ctx.Set("user-type", "logged-in")
+		ctx.Set("exp", jwtData.ExpireTime)
+		ctx.Set("user", jwtData.Username)
+		log.Println("hello")
+
 		ctx.Next()
 	}
 }
 
-func VerifyToken(tokenString string, secretKey []byte) (*jwt.Token, error) {
+func VerifyToken(tokenString string, secretKey []byte) (err error, jwtData *JWTData) {
 	tk, err := jwt.Parse(tokenString, func(jwtToken *jwt.Token) (interface{}, error) {
 		if _, ok := jwtToken.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("unexpected signing method")
@@ -27,29 +46,31 @@ func VerifyToken(tokenString string, secretKey []byte) (*jwt.Token, error) {
 	})
 
 	if err != nil {
-		return nil, err
+		return err, nil
 	}
 
 	if !tk.Valid {
-		return nil, errors.New("invalid token signature")
+		return errors.New("invalid token signature"), nil
 	}
 
 	claims, ok := tk.Claims.(jwt.MapClaims)
 	if !ok {
-		return nil, errors.New("invalid token signature")
+		return errors.New("invalid JWT token"), nil
 	}
 
 	expireTime, ok := claims["exp"].(string)
 	if !ok {
-		log.Println("bad")
+		return errors.New("invalid JWT token"), nil
 	}
 	username, ok := claims["user"].(string)
 	if !ok {
-		log.Println("bad")
+		return errors.New("invalid JWT token"), nil
 	}
-	log.Println(username, expireTime)
 
-	return tk, nil
+	return nil, &JWTData{
+		ExpireTime: expireTime,
+		Username:   username,
+	}
 }
 
 //func JWTParser(tkString string) {

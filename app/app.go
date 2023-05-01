@@ -3,9 +3,11 @@ package app
 import (
 	"PassargadUser/app/middleware"
 	"PassargadUser/config"
+	"PassargadUser/delivery/rest"
 	"PassargadUser/entities/domain"
 	"PassargadUser/pkg/sqlite"
 	"PassargadUser/repository"
+	"github.com/gin-gonic/gin"
 	"log"
 )
 
@@ -25,16 +27,17 @@ func InitApp() {
 	if err != nil {
 		log.Fatalf("migration failed: %v", err.Error())
 	}
-	log.Println("ggggggggggg")
-	var sampleSecretKey = []byte("SecretYouShouldsdfsdfsdfsdfsdffsdfsdfHide")
-	middleware.VerifyToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOiIyMDIzLTA0LTMwVDE4OjM2OjQ5Ljg4NDYxMDQ2MyswMzozMCIsInVzZXIiOiIxMjMifQ.w7gWxVsmmvaqmH6g5b3OY4_dvPgQ8SgXT1jH5qVlCVw", sampleSecretKey)
 
-	//r := gin.Default()
+	//log.Println("ggggggggggg")
+	//middleware.VerifyToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOiIyMDIzLTA0LTMwVDE4OjM2OjQ5Ljg4NDYxMDQ2MyswMzozMCIsInVzZXIiOiIxMjMifQ.w7gWxVsmmvaqmH6g5b3OY4_dvPgQ8SgXT1jH5qVlCVw", sampleSecretKey)
+
+	r := gin.Default()
 	//r.Use(gin.Recovery())
 	//r.Use(gin.Logger())
-	//r.POST("/create", rest.CreateUser)
-	//r.POST("/login", rest.LoginUser)
-	//r.Run()
+	r.Use(middleware.JWTVerify())
+	r.POST("/create", rest.CreateUser)
+	r.POST("/login", rest.LoginUser)
+	r.Run()
 
 	//lis, err := net.Listen("tcp", cnf.ExternalExpose.GrpcPort)
 	//if err != nil {

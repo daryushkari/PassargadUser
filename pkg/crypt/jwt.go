@@ -1,6 +1,7 @@
 package crypt
 
 import (
+	"PassargadUser/config"
 	"github.com/golang-jwt/jwt/v5"
 	"time"
 )
@@ -10,15 +11,13 @@ const (
 )
 
 func GenerateJWT(username string) (error, string) {
-	var sampleSecretKey = []byte("SecretYouShouldsdfsdfsdfsdfsdffsdfsdfHide")
-
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)
 	claims["exp"] = time.Now().Add(JWTExpireTime)
 	claims["user"] = username
 
-	tokenString, err := token.SignedString(sampleSecretKey)
+	tokenString, err := token.SignedString(config.SampleSecretKey)
 	if err != nil {
 		return err, ""
 	}
