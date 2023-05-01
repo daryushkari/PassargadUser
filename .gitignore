@@ -19,4 +19,4 @@
 /.idea/vcs.xml
 /.idea/walletMicroservice.iml
 secret-config.json
-./gin.log
+gin.log
