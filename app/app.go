@@ -40,7 +40,8 @@ func InitApp() {
 		log.Fatalf("migration failed: %v", err.Error())
 	}
 
-	f, err := os.Create("gin.log")
+	ginLogPath := "gin.log"
+	f, err := os.Create(ginLogPath)
 	if err != nil {
 		log.Fatalf("log file creation failed: %v", err.Error())
 	}
