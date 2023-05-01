@@ -54,7 +54,9 @@ func GetUserInfo(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"data": requestModel.UserInfoResponse{
-		Email: user.Email,
+		Email:     user.Email,
+		FirstName: user.Firstname,
+		LastName:  user.Lastname,
 	}})
 }
 
