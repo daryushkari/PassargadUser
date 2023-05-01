@@ -20,6 +20,12 @@ func InitApp() {
 	if err != nil {
 		log.Fatalf("config not available with error: %v", err.Error())
 	}
+
+	err = config.SetSecret("secret-config.json")
+	if err != nil {
+		log.Fatalf("secret config not available with error: %v", err.Error())
+	}
+
 	err, sDB := sqlite.Get(cfg.Database.Name)
 	if err != nil {
 		log.Fatalf("could not connect to database: %v", err.Error())
@@ -39,7 +45,10 @@ func InitApp() {
 	r.Use(gin.Logger())
 	r.Use(middleware.JWTVerify())
 	AddUserRouter(r)
-	r.Run()
+	err = r.Run()
+	if err != nil {
+		log.Println("rest server failed to run")
+	}
 }
 
 func RouteGRPC(cnf *config.EnvConfig) {
