@@ -28,7 +28,6 @@ func InitApp() {
 		log.Fatalf("migration failed: %v", err.Error())
 	}
 
-	//log.Println("ggggggggggg")
 	//middleware.VerifyToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOiIyMDIzLTA0LTMwVDE4OjM2OjQ5Ljg4NDYxMDQ2MyswMzozMCIsInVzZXIiOiIxMjMifQ.w7gWxVsmmvaqmH6g5b3OY4_dvPgQ8SgXT1jH5qVlCVw", sampleSecretKey)
 
 	r := gin.Default()

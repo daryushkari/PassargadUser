@@ -6,7 +6,6 @@ import (
 	"errors"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
 	"time"
 )
@@ -18,7 +17,6 @@ type JWTData struct {
 
 func JWTVerify() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		log.Println(ctx.Request.Header["Token"])
 		if ctx.Request.Header["Token"] == nil {
 			ctx.Set("user-type", "guest")
 			ctx.Next()
