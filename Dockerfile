@@ -11,6 +11,7 @@ RUN go mod download
 EXPOSE 9000
 EXPOSE 8080
 
+COPY config.json ./
 COPY . ./
 RUN CGO_ENABLED=0 GOOS=linux go build -o /PassargadUser
 CMD ["/PassargadUser"]
