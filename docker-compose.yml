@@ -10,9 +10,7 @@ services:
       dockerfile: Dockerfile.dev
     volumes:
       - database:./database.db
-      - type: bind
-        source: ./gin.log
-        target: ./gin.log
+      - ./gin.log:./gin.log
     networks:
       - backend
     depends_on:
