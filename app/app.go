@@ -7,14 +7,21 @@ import (
 	grpcGateway "PassargadUser/delivery/grpc"
 	"PassargadUser/delivery/rest"
 	"PassargadUser/entities/domain"
+	"PassargadUser/pkg/jtrace"
 	"PassargadUser/pkg/postgresql"
 	"PassargadUser/repository"
+	"context"
 	"github.com/gin-gonic/gin"
+	"go.opentelemetry.io/otel"
 	"google.golang.org/grpc"
 	"io"
 	"log"
 	"net"
 	"os"
+)
+
+const (
+	JaegerURL = "http://localhost:14268/api/traces"
 )
 
 func InitApp() {
@@ -32,6 +39,15 @@ func InitApp() {
 	if err != nil {
 		log.Fatalf("could not connect to database: %v", err.Error())
 	}
+
+	err, tp := jtrace.TracerProvider(JaegerURL)
+	if err != nil {
+		log.Fatal(err)
+	}
+	otel.SetTracerProvider(tp)
+	defer tp.Shutdown(context.Background())
+
+	jtrace.TR = tp.Tracer("component-main")
 
 	repository.UsrRepo.InitDB(sDB)
 

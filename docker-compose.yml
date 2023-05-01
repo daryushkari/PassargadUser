@@ -1,15 +1,16 @@
-version: "3.7"
+version: "3.9"
 
 services:
-#  passargad:
-#    image: passargad
-#    networks:
-#      - backend
-#    depends_on:
-#      - jaeger
-#    ports:
-#      - 8080:8080
-#      - 9000:9000
+  passargad:
+    build: .
+    networks:
+      - backend
+    depends_on:
+      - jaeger
+      - postgres
+    ports:
+      - 8080:8080
+      - 9000:9000
 
   jaeger:
     image: jaegertracing/all-in-one:1.20
