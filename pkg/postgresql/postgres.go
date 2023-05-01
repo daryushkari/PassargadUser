@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"log"
 )
 
 var (
@@ -20,7 +19,6 @@ func Get(cnf *config.EnvConfig) (err error, sDB *gorm.DB) {
 			cnf.Database.Password,
 			cnf.Database.DBName,
 			cnf.Database.Port)
-		log.Println(dsn)
 		pdb, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 		if err != nil {
 			return err, nil

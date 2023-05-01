@@ -21,7 +21,7 @@ import (
 )
 
 const (
-	JaegerURL = "http://localhost:14268/api/traces"
+	JaegerURL = "http://localhost:1215/api/traces"
 )
 
 func InitApp() {
