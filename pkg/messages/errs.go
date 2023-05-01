@@ -7,5 +7,5 @@ const (
 	LoginSuccessful     = "user is logged in"
 	CreatedSuccessfully = "user created successfully"
 	UnAuthorized        = "user is unauthorized"
-	TokenExpired        = "token is expired"
+	InternalServerError = "Internal server error"
 )

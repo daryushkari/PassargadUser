@@ -36,6 +36,7 @@ func InitApp() {
 	r.Use(middleware.JWTVerify())
 	r.POST("/create", rest.CreateUser)
 	r.POST("/login", rest.LoginUser)
+	r.GET("/info", rest.GetUserInfo)
 	r.Run()
 
 	//lis, err := net.Listen("tcp", cnf.ExternalExpose.GrpcPort)

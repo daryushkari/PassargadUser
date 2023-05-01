@@ -28,3 +28,9 @@ type BasicResponse struct {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
 }
+
+type UserInfoResponse struct {
+	FirstName string `json:"first-name"`
+	LastName  string `json:"last-name"`
+	Email     string `json:"email"`
+}

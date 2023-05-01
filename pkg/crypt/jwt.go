@@ -10,6 +10,19 @@ const (
 	JWTExpireTime = 10 * time.Minute
 )
 
+type UserType string
+
+const (
+	LoggedIn UserType = "logged-in"
+	Guest    UserType = "guest"
+)
+
+const (
+	UserTypeKey = "user-type"
+	ExpireKey   = "exp"
+	UsernameKey = "user"
+)
+
 func GenerateJWT(username string) (error, string) {
 	token := jwt.New(jwt.SigningMethodHS256)
 
