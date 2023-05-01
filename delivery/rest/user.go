@@ -7,6 +7,8 @@ import (
 	"PassargadUser/repository"
 	"PassargadUser/usecase"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+	"log"
 	"net/http"
 )
 
@@ -87,6 +89,7 @@ func UpdateUser(ctx *gin.Context) {
 	usr.Password = crypt.GetMD5Hash(input.Password)
 	usr.Firstname = input.FirstName
 	usr.Lastname = input.LastName
+	log.Println(input.LastName, input.FirstName, "cvcvcvcvvvvvvvvvvvvv")
 	usr.Email = input.Email
 
 	err = repository.UsrRepo.Update(ctx, usr)
@@ -117,7 +120,12 @@ func GetUserInfo(ctx *gin.Context) {
 
 	err, user := repository.UsrRepo.GetByUsername(ctx, username)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": messages.InternalServerError})
+		if err == gorm.ErrRecordNotFound {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": messages.UserNameNotExist})
+		} else {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": messages.InternalServerError})
+		}
+		return
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"data": requestModel.UserInfoResponse{

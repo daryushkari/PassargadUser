@@ -77,7 +77,7 @@ func (r *UserRepository) Update(ctx *gin.Context, usr *domain.User) (err error) 
 	rdb := tx.Model(usr).Updates(domain.User{
 		Password:  usr.Password,
 		Email:     usr.Email,
-		Firstname: usr.Email,
+		Firstname: usr.Firstname,
 		Lastname:  usr.Lastname,
 	})
 	return rdb.Error

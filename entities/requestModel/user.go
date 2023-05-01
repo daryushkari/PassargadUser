@@ -30,14 +30,14 @@ type BasicResponse struct {
 }
 
 type UserInfoResponse struct {
-	FirstName string `json:"first-name"`
-	LastName  string `json:"last-name"`
+	FirstName string `json:"firstname"`
+	LastName  string `json:"lastname"`
 	Email     string `json:"email"`
 }
 
 type UpdateUserRequest struct {
-	FirstName string `json:"first-name"`
-	LastName  string `json:"last-name"`
+	FirstName string `json:"firstname"`
+	LastName  string `json:"lastname"`
 	Email     string `json:"email"`
 	Password  string `json:"password"`
 }
