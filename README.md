@@ -1,1 +1,1 @@
-# walletMicroservice
+sudo docker build --tag passargad .

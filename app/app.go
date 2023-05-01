@@ -7,7 +7,7 @@ import (
 	grpcGateway "PassargadUser/delivery/grpc"
 	"PassargadUser/delivery/rest"
 	"PassargadUser/entities/domain"
-	"PassargadUser/pkg/sqlite"
+	"PassargadUser/pkg/postgresql"
 	"PassargadUser/repository"
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
@@ -28,7 +28,7 @@ func InitApp() {
 		log.Fatalf("secret config not available with error: %v", err.Error())
 	}
 
-	err, sDB := sqlite.Get(cfg.Database.Name)
+	err, sDB := postgresql.Get(cfg)
 	if err != nil {
 		log.Fatalf("could not connect to database: %v", err.Error())
 	}

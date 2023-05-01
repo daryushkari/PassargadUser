@@ -11,7 +11,12 @@ var (
 
 type EnvConfig struct {
 	Database struct {
-		Name string `json:"name"`
+		Name     string `json:"name"`
+		Host     string `json:"host"`
+		User     string `json:"user"`
+		Password string `json:"password"`
+		DBName   string `json:"DBName"`
+		Port     string `json:"port"`
 	} `json:"database"`
 	ExternalExpose struct {
 		GrpcPort string `json:"grpc-port"`

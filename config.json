@@ -1,7 +1,12 @@
 {
   "production": {
     "database": {
-      "name": "./database.db"
+      "name": "./database.db",
+      "host": "localhost",
+      "user": "admin",
+      "password":  "password",
+      "DBName": "micro",
+      "port":  "5432"
     },
     "externalExpose": {
       "grpc-port": ":9000"

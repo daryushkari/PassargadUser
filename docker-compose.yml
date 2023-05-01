@@ -1,29 +1,42 @@
 version: "3.7"
 
 services:
-  # -----------------------------
-  # micro service
-  # -----------------------------
-  micro:
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
-    volumes:
-      - database:./database.db
-      - ./gin.log:./gin.log
-    networks:
-      - backend
-    depends_on:
-      - jaeger
-    ports:
-      - 8080:8080
-      - 9000:9000
+#  passargad:
+#    image: passargad
+#    networks:
+#      - backend
+#    depends_on:
+#      - jaeger
+#    ports:
+#      - 8080:8080
+#      - 9000:9000
 
   jaeger:
     image: jaegertracing/all-in-one:1.20
     ports:
       - "1214:6831/udp"
       - "1215:16686"
+    networks:
+      - backend
+
+  postgres:
+    image: postgres:13.3
+    restart: unless-stopped
+    volumes:
+      - database:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: admin
+      POSTGRES_DB: micro
+    networks:
+      - backend
+
+  adminer:
+    image: adminer
+    ports:
+      - 8900:8080
     networks:
       - backend
 
