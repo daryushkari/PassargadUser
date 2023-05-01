@@ -1,4 +1,4 @@
-package grpc
+package grpcGateway
 
 import (
 	userPb "PassargadUser/api/pb/proto"

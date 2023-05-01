@@ -4,8 +4,7 @@
       "name": "./database.db"
     },
     "externalExpose": {
-      "grpc-port": "9000",
-      "rest-port": "9091"
+      "grpc-port": ":9000"
     }
   },
 

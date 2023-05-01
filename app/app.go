@@ -1,14 +1,18 @@
 package app
 
 import (
+	userPb "PassargadUser/api/pb/proto"
 	"PassargadUser/app/middleware"
 	"PassargadUser/config"
+	grpcGateway "PassargadUser/delivery/grpc"
 	"PassargadUser/delivery/rest"
 	"PassargadUser/entities/domain"
 	"PassargadUser/pkg/sqlite"
 	"PassargadUser/repository"
 	"github.com/gin-gonic/gin"
+	"google.golang.org/grpc"
 	"log"
+	"net"
 )
 
 func InitApp() {
@@ -28,29 +32,29 @@ func InitApp() {
 		log.Fatalf("migration failed: %v", err.Error())
 	}
 
-	//middleware.VerifyToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOiIyMDIzLTA0LTMwVDE4OjM2OjQ5Ljg4NDYxMDQ2MyswMzozMCIsInVzZXIiOiIxMjMifQ.w7gWxVsmmvaqmH6g5b3OY4_dvPgQ8SgXT1jH5qVlCVw", sampleSecretKey)
+	go RouteGRPC(cfg)
 
 	r := gin.Default()
-	//r.Use(gin.Recovery())
-	//r.Use(gin.Logger())
+	r.Use(gin.Recovery())
+	r.Use(gin.Logger())
 	r.Use(middleware.JWTVerify())
 	AddUserRouter(r)
 	r.Run()
+}
 
-	//lis, err := net.Listen("tcp", cnf.ExternalExpose.GrpcPort)
-	//if err != nil {
-	//	log.Fatalf("failed to listen: %v", err)
-	//}
-	//
-	//s := userDelivery.Server{}
-	//
-	//grpcServer := grpc.NewServer()
-	//
-	//userPb.RegisterUserServer(grpcServer, &s)
-	//
-	//if err = grpcServer.Serve(lis); err != nil {
-	//	log.Fatalf("failed to serve: %s", err)
-	//}
+func RouteGRPC(cnf *config.EnvConfig) {
+	lis, err := net.Listen("tcp", cnf.ExternalExpose.GrpcPort)
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+
+	s := grpcGateway.Server{}
+	grpcServer := grpc.NewServer()
+	userPb.RegisterUserServer(grpcServer, &s)
+
+	if err = grpcServer.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %s", err)
+	}
 }
 
 func AddUserRouter(r *gin.Engine) {
