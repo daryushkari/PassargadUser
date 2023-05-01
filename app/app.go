@@ -11,8 +11,10 @@ import (
 	"PassargadUser/repository"
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
+	"io"
 	"log"
 	"net"
+	"os"
 )
 
 func InitApp() {
@@ -37,6 +39,12 @@ func InitApp() {
 	if err != nil {
 		log.Fatalf("migration failed: %v", err.Error())
 	}
+
+	f, err := os.Create("gin.log")
+	if err != nil {
+		log.Fatalf("log file creation failed: %v", err.Error())
+	}
+	gin.DefaultWriter = io.MultiWriter(f)
 
 	go RouteGRPC(cfg)
 

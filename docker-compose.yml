@@ -1,0 +1,38 @@
+version: "3.7"
+
+services:
+  # -----------------------------
+  # micro service
+  # -----------------------------
+  micro:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - database:./database.db
+      - logs:./gin.log
+    networks:
+      - backend
+    depends_on:
+      - jaeger
+    ports:
+      - 8080:8080
+      - 9000:9000
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.20
+    ports:
+      - "1214:6831/udp"
+      - "1215:16686"
+    networks:
+      - backend
+
+
+networks:
+  backend:
+
+volumes:
+  database:
+    driver: local
+  logs:
+    driver: local
