@@ -47,8 +47,6 @@ func InitApp() {
 	otel.SetTracerProvider(tp)
 	defer tp.Shutdown(context.Background())
 
-	jtrace.TR = tp.Tracer("component-main")
-
 	repository.UsrRepo.InitDB(sDB)
 
 	err = sDB.AutoMigrate(&domain.User{})
