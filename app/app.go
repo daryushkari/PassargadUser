@@ -20,10 +20,6 @@ import (
 	"os"
 )
 
-const (
-	JaegerURL = "http://localhost:1215/api/traces"
-)
-
 func InitApp() {
 	cfg, err := config.Get("./config.json", config.ProductionEnv)
 	if err != nil {
@@ -40,7 +36,7 @@ func InitApp() {
 		log.Fatalf("could not connect to database: %v", err.Error())
 	}
 
-	err, tp := jtrace.TracerProvider(JaegerURL)
+	err, tp := jtrace.TracerProvider(cfg.JtraceURL)
 	if err != nil {
 		log.Fatal(err)
 	}

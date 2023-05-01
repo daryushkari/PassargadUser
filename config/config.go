@@ -22,6 +22,7 @@ type EnvConfig struct {
 		GrpcPort string `json:"grpc-port"`
 		RestPort string `json:"rest-port"`
 	} `json:"externalExpose"`
+	JtraceURL string `json:"jaeger-url"`
 }
 
 type FullConfig struct {
