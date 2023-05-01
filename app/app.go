@@ -34,9 +34,7 @@ func InitApp() {
 	//r.Use(gin.Recovery())
 	//r.Use(gin.Logger())
 	r.Use(middleware.JWTVerify())
-	r.POST("/create", rest.CreateUser)
-	r.POST("/login", rest.LoginUser)
-	r.GET("/info", rest.GetUserInfo)
+	AddUserRouter(r)
 	r.Run()
 
 	//lis, err := net.Listen("tcp", cnf.ExternalExpose.GrpcPort)
@@ -53,4 +51,15 @@ func InitApp() {
 	//if err = grpcServer.Serve(lis); err != nil {
 	//	log.Fatalf("failed to serve: %s", err)
 	//}
+}
+
+func AddUserRouter(r *gin.Engine) {
+	userRouter := r.Group("/user")
+	{
+		userRouter.POST("/create", rest.CreateUser)
+		userRouter.POST("/login", rest.LoginUser)
+		userRouter.GET("/info", rest.GetUserInfo)
+		userRouter.POST("/update", rest.UpdateUser)
+		userRouter.DELETE("/delete", rest.DeleteUser)
+	}
 }
