@@ -43,6 +43,7 @@ func InitApp() {
 }
 
 func RouteGRPC(cnf *config.EnvConfig) {
+	log.Println("starting grpc server at ", cnf.ExternalExpose.GrpcPort)
 	lis, err := net.Listen("tcp", cnf.ExternalExpose.GrpcPort)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
