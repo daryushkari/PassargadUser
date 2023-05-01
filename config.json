@@ -3,7 +3,7 @@
     "jaeger-url": "jaeger:1215",
     "database": {
       "name": "./database.db",
-      "host": "localhost",
+      "host": "postgres",
       "user": "admin",
       "password":  "password",
       "DBName": "micro",
