@@ -6,4 +6,6 @@ const (
 	WrongPassword       = "password is wrong"
 	LoginSuccessful     = "user is logged in"
 	CreatedSuccessfully = "user created successfully"
+	UnAuthorized        = "user is unauthorized"
+	TokenExpired        = "token is expired"
 )

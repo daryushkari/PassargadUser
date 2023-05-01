@@ -2,11 +2,13 @@ package middleware
 
 import (
 	"PassargadUser/config"
+	"PassargadUser/pkg/messages"
 	"errors"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	"time"
 )
 
 type JWTData struct {
@@ -25,13 +27,24 @@ func JWTVerify() gin.HandlerFunc {
 
 		err, jwtData := VerifyToken(ctx.Request.Header["Token"][0], config.SampleSecretKey)
 		if err != nil {
-			ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": messages.UnAuthorized})
+			return
+		}
+
+		expTime, err := time.Parse("2023-05-01T11:23:14", jwtData.ExpireTime)
+		if err != nil {
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": messages.UnAuthorized})
+			return
+		}
+
+		if time.Now().After(expTime) {
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": messages.TokenExpired})
+			return
 		}
 
 		ctx.Set("user-type", "logged-in")
 		ctx.Set("exp", jwtData.ExpireTime)
 		ctx.Set("user", jwtData.Username)
-		log.Println("hello")
 
 		ctx.Next()
 	}
